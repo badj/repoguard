@@ -1,7 +1,7 @@
 # RepoGuard: Pre-Install Security Scanner
 
 > RepoGuard is a lightweight bash script designed to audit third-party repositories before you run npm install or npm start.
-> Script from ["Real-world malware analysis" by Ryan Oberholzer](https://medium.com/@ryan.oberholzer/i-was-sent-a-technical-assessment-it-was-malware-heres-the-full-story-30797665d940), this tool helps detect backdoors, obfuscated code, and credential-stealing patterns common in "technical assessment" scams.
+> Script from ["Real-world malware analysis" by Ryan Oberholzer](https://medium.com/@ryan.oberholzer/i-was-sent-a-technical-assessment-it-was-malware-heres-the-full-story-30797665d940) / [_local copy of article_](Article/Real-world-malware-analysis-by-Ryan-Oberholzer.pdf). This tool helps detect backdoors, obfuscated code, and credential-stealing patterns common in "technical assessment" scams.
 
 ## Why to use this?
 
@@ -20,6 +20,7 @@ In modern supply-chain attacks, malware is often hidden in plain sight—stitche
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
     - [How to Use](#how-to-use)
+    - [Output sample – no backdoors found](#output-sample--no-backdoors-found)
     - [What it Checks](#what-it-checks)
 - [Safety Best Practices](#safety-best-practices)
 - [Contributing](#contributing)
@@ -54,6 +55,37 @@ Do not run this [script - check-repo.sh](check-repo.sh) inside the malicious rep
 
 ```Bash
 ./check-repo.sh
+```
+
+[_⇡ Return to the Table of Contents_](#table-of-contents)
+
+### Output sample – no backdoors found
+
+```terminaloutput
+  jjbadenhorst:repoguard (main) % chmod +x check-repo.sh
+  jjbadenhorst:repoguard (main) % ./check-repo.sh
+  
+  --- 2. Dangerous patterns (eval, exec, private keys) ---
+    (none found)
+  
+  --- 3. Base64 / encoded strings ---
+    (none found)
+  
+  --- 4. Config file lengths (obfuscation = very long) ---
+  
+  --- 5. Post install / preinstall scripts ---
+    (none in root package.json)
+  
+  --- 6. Suspicious dependencies (0.0.0, 0.0.1) ---
+    (none found)
+  
+  === DONE ===
+  Review the output above. If you see:
+    - Unknown external URLs (not Infura, Alchemy, your backend)
+    - process.env.Wallet* or process.env.*Private* sent anywhere
+    - Config files with 100+ lines (scroll to end and look for hex/obfuscation)
+    - post install scripts from unknown packages
+    -> DO NOT RUN npm install or npm start. Investigate further or run in Docker only.
 ```
 
 [_⇡ Return to the Table of Contents_](#table-of-contents)
