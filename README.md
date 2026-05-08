@@ -51,7 +51,7 @@ chmod +x check-repo.sh
 
 ### How to Use
 
-Do not run this [script - check-repo.sh](check-repo.sh) inside the malicious repo's directory if you are unsure. Instead, move the script into the root of the project you want to inspect and run:
+Move the [script - check-repo.sh](check-repo.sh) into the root of the project you want to inspect and run:
 
 ```Bash
 ./check-repo.sh
