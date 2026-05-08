@@ -39,7 +39,7 @@ In modern supply-chain attacks, malware is often hidden in plain sight—stitche
 
 ### Installation
 
-Clone this repository or download the check-repo.sh file and make the script executable.:
+Clone this repository or download the check-repo.sh file and make the script executable:
 
 ```Bash
 git clone https://github.com/badj/repoguard.git
