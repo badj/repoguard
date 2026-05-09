@@ -25,6 +25,7 @@ In modern supply-chain attacks, malware is often hidden in plain sight—stitche
     - [Output sample – backdoors found](#output-sample--backdoors-found)
     - [What it Checks](#what-it-checks)
 - [Safety Best Practices](#safety-best-practices)
+- [TO DO](#to-do)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -187,6 +188,13 @@ Review the output above. If you see:
 - Use Docker. If you must run the code, run it in a container without mounting your home directory.
 - Review the Output. This script is a helper, not a guarantee.
 - If it flags a 500-line tailwind.config.js, open that file and scroll to the bottom!
+
+[_⇡ Return to the Table of Contents_](#table-of-contents)
+
+## TO DO
+
+1. [Create test coverage with BATS-CORE and create a GitHub Actions/workflow for CI/CD to run the tests](https://github.com/badj/repoguard/issues/1)
+2. [Create a RepoGuard package for npm, install and publish to the npm registry](https://github.com/badj/repoguard/issues/2)
 
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 
