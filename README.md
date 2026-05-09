@@ -54,7 +54,7 @@ chmod +x check-repo.sh
 ### Project Structure
 
 ```terminaloutput
-─ repoguard
+repoguard
 ├── Article             // local copy of article
 │ └── Real-world-malware-analysis-by-Ryan-Oberholzer.pdf
 ├── LICENSE
