@@ -19,8 +19,10 @@ In modern supply-chain attacks, malware is often hidden in plain sight—stitche
 - [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
+    - [Project Structure](#project-structure)
     - [How to Use](#how-to-use)
     - [Output sample – no backdoors found](#output-sample--no-backdoors-found)
+    - [Output sample – backdoors found](#output-sample--backdoors-found)
     - [What it Checks](#what-it-checks)
 - [Safety Best Practices](#safety-best-practices)
 - [Contributing](#contributing)
@@ -49,6 +51,30 @@ chmod +x check-repo.sh
 
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 
+### Project Structure
+
+```terminaloutput
+─ repoguard
+├── Article             // local copy of article
+│ └── Real-world-malware-analysis-by-Ryan-Oberholzer.pdf
+├── LICENSE
+├── README.md
+├── babel.config.js     // Test Sample File
+├── backend             // Test Sample Folder 
+│ └── package.json      // Test Sample File
+├── check-repo.sh       // RepoGuard Bash Script
+├── decoder-catch.js    // Test Sample File
+├── package.json        // Test Sample File
+├── postcss.config.js   // Test Sample File
+├── tailwind.config.js  // Test Sample File
+├── vulnerable_test.ts  // Test Sample File
+└── webpack.config.js   // Test Sample File
+
+3 directories, 12 files
+```
+
+[_⇡ Return to the Table of Contents_](#table-of-contents)
+
 ### How to Use
 
 Move the [script - check-repo.sh](check-repo.sh) into the root of the project you want to inspect and run:
@@ -65,18 +91,19 @@ Move the [script - check-repo.sh](check-repo.sh) into the root of the project yo
   jjbadenhorst:repoguard (main) % chmod +x check-repo.sh
   jjbadenhorst:repoguard (main) % ./check-repo.sh
   
-  --- 2. Dangerous patterns (eval, exec, private keys) ---
+  --- 1. Dangerous patterns (eval, exec, private keys) ---
     (none found)
   
-  --- 3. Base64 / encoded strings ---
+  --- 2. Base64 / encoded strings ---
     (none found)
   
-  --- 4. Config file lengths (obfuscation = very long) ---
+  --- 3. Config file lengths (obfuscation = very long) ---
+    (none found)
   
-  --- 5. Post install / preinstall scripts ---
-    (none in root package.json)
+  --- 4. Post install / preinstall scripts ---
+    (none found)
   
-  --- 6. Suspicious dependencies (0.0.0, 0.0.1) ---
+  --- 5. Suspicious dependencies (0.0.0, 0.0.1) ---
     (none found)
   
   === DONE ===
@@ -85,7 +112,61 @@ Move the [script - check-repo.sh](check-repo.sh) into the root of the project yo
     - process.env.Wallet* or process.env.*Private* sent anywhere
     - Config files with 100+ lines (scroll to end and look for hex/obfuscation)
     - post install scripts from unknown packages
-    -> DO NOT RUN npm install or npm start. Investigate further or run in Docker only.
+    -> DO NOT RUN npm install or npm start. Investigate further or run in Docker only!
+```
+
+### Output sample – backdoors found
+
+> Refer to [Project Structure](#project-structure) for the test files used to generate this output. 
+>
+> Run `check-repo.sh` in this project to demo DANGEROUS PATTERNS found. 
+
+```terminaloutput
+  jjbadenhorst:repoguard (main) % ./check-repo.sh
+  
+  --- 1. Dangerous patterns (eval, exec, private keys) ---
+  ./vulnerable_test.ts:8:    eval(input);
+  ./vulnerable_test.ts:13:child_process.exec(command);
+  ./vulnerable_test.ts:16:const dynamicFunction = new Function('a', 'b', 'return a + b');
+  ./vulnerable_test.ts:20:    apiKey: process.env.PrivateKey,    // Should be caught
+  ./vulnerable_test.ts:21:    walletId: process.env.WalletAddress, // Should be caught
+  ./vulnerable_test.ts:22:    token: process.env.SecretToken,    // Should be caught
+  ./vulnerable_test.ts:23:    encryption: process.env.EKEY_VALUE, // Should be caught
+  
+  --- 2. Base64 / encoded strings ---
+  ./decoder-catch.js:8:        Buffer[at(0x66)](s1, r)[aw(0x68)+au(0x4c)](t)  // Buffer.from(s1, 'base64').toString('utf8')
+  
+  --- 3. Config file lengths (obfuscation = very long) ---
+    tailwind.config.js:      126 lines
+    ^ WARNING: Config > 100 lines - scroll to end and check for obfuscated code
+    webpack.config.js:      126 lines
+    ^ WARNING: Config > 100 lines - scroll to end and check for obfuscated code
+    babel.config.js:      126 lines
+    ^ WARNING: Config > 100 lines - scroll to end and check for obfuscated code
+    postcss.config.js:      126 lines
+    ^ WARNING: Config > 100 lines - scroll to end and check for obfuscated code
+  
+  --- 4. Post install / preinstall scripts ---
+  package.json:    "postinstall": "npx fakeApp test 1",
+  package.json:    "preinstall": "npx fakeApp test 2",
+  package.json:    "prepare": "npx fakeApp test 3"
+  backend/package.json:    "postinstall": "npx fakeApp test 1",
+  backend/package.json:    "preinstall": "npx fakeApp test 2",
+  backend/package.json:    "prepare": "npx fakeApp test 3"
+  
+  --- 5. Suspicious dependencies (0.0.0, 0.0.1) ---
+  package.json:    "@catchMe/test4": "0.0.0",
+  package.json:    "@catchMe/test5": "0.0.1",
+  backend/package.json:    "@catchMe/test4": "0.0.0",
+  backend/package.json:    "@catchMe/test5": "0.0.1",
+  
+  === DONE ===
+  Review the output above. If you see:
+    - Unknown external URLs (not Infura, Alchemy, your backend)
+    - process.env.Wallet* or process.env.*Private* sent anywhere
+    - Config files with 100+ lines (scroll to end and look for hex/obfuscation)
+    - post install scripts from unknown packages
+    -> DO NOT RUN npm install or npm start. Investigate further or run in Docker only!
 ```
 
 [_⇡ Return to the Table of Contents_](#table-of-contents)
