@@ -5,15 +5,15 @@
 
 // 1. Catches "eval\("
 const dangerousEval = (input: string) => {
-    eval(input);
+    eval(input); // Should be caught
 };
 
 // 2. Catches "exec\("
 const child_process = require('child_process');
-child_process.exec(command);
+child_process.exec(command); // Should be caught
 
 // 3. Catches "Function\("
-const dynamicFunction = new Function('a', 'b', 'return a + b');
+const dynamicFunction = new Function('a', 'b', 'return a + b'); // Should be caught
 
 // 4. Catches "process.env.(Wallet|Private|Key|Secret|EKEY)"
 const config = {
