@@ -9,21 +9,21 @@
   "description": "repoguard test file to be detected by check-repo.sh",
   "main": "index.js",
   "scripts": {
-    "postinstall": "npx fakeApp test 1",
-    "preinstall": "npx fakeApp test 2",
-    "prepare": "npx fakeApp test 3"
+    "postinstall": "npx ShouldBeCaught test 1",
+    "preinstall": "npx ShouldBeCaught test 2",
+    "prepare": "npx ShouldBeCaught test 3"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "@catchMe/test": "^0.0.01",
-    "@catchMe/test2": "^0.0.0",
-    "@catchMe/test3": "^1.59.1",
-    "@catchMe/test4": "0.0.0",
-    "@catchMe/test5": "0.0.1",
-    "@types/node": "^24.5.2"
+    "@catchMe/test1ShouldNotBeCaught": "^0.0.01",
+    "@catchMe/test2ShouldNotBeCaught": "^0.0.0",
+    "@catchMe/test3ShouldNotBeCaught": "^1.59.1",
+    "@catchMe/test4ShouldBeCaught": "0.0.0",
+    "@catchMe/test5ShouldBeCaught": "0.0.1",
+    "@types/nodeShouldNotBeCaught": "^24.5.2"
   },
   "directories": {
     "test": "tests"
