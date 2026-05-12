@@ -39,6 +39,7 @@ In modern supply-chain attacks, malware is often hidden in plain sight—stitche
 1. A Unix-based environment (Linux, macOS, WSL).
 2. grep and wc installed _(standard on most systems)_.
 
+
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 
 ### Installation
@@ -50,6 +51,7 @@ git clone https://github.com/badj/repoguard.git
 cd repoguard
 chmod +x check-repo.sh
 ```
+
 
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 
@@ -83,6 +85,7 @@ repoguard
 3 directories, 12 files
 ```
 
+
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 
 ### How to Use
@@ -92,6 +95,7 @@ Move the [script - check-repo.sh](check-repo.sh) into the root of the project yo
 ```Bash
 ./check-repo.sh
 ```
+
 
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 
@@ -179,6 +183,7 @@ Review the output above. If you see:
   -> DO NOT RUN npm install or npm start. Investigate further or run in Docker only!
 ```
 
+
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 
 ### What it Checks
@@ -189,6 +194,7 @@ Review the output above. If you see:
 4. **Lifecycle Hooks:** Scans package.json for pre-install or post-install scripts that run code automatically.
 5. **Suspicious Dependencies:** Flags packages using placeholder versions like 0.0.0.
 
+
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 
 ## Safety Best Practices
@@ -197,6 +203,7 @@ Review the output above. If you see:
 - Use Docker. If you must run the code, run it in a container without mounting your home directory.
 - Review the Output. This script is a helper, not a guarantee.
 - If it flags a 500-line tailwind.config.js, open that file and scroll to the bottom!
+
 
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 
@@ -235,12 +242,13 @@ Review the output above. If you see:
   ok 9 script includes safety review message in 62ms
 ```
 
+
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 
 ## TO DO
 
-1. [Create test coverage with BATS-CORE and create a GitHub Actions/workflow for CI/CD to run the tests](https://github.com/badj/repoguard/issues/1)
-2. [Create a RepoGuard package for npm, install and publish to the npm registry](https://github.com/badj/repoguard/issues/2)
+1.[Create a RepoGuard package for npm, install and publish to the npm registry](https://github.com/badj/repoguard/issues/2)
+
 
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 
@@ -248,11 +256,13 @@ Review the output above. If you see:
 
 Found a new malware pattern? Please open an Issue or submit a Pull Request to update the grep patterns.
 
+
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 
 ## License
 
 Distributed under the MIT License. See LICENSE for more information.
 **Disclaimer:** This tool is for educational and auditing purposes. It cannot detect 100% of all threats. Always use your best judgment when running untrusted code.
+
 
 [_⇡ Return to the Table of Contents_](#table-of-contents)
