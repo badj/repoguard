@@ -213,8 +213,9 @@ Review the output above. If you see:
   bats --tap --trace --timing
 ```
 
-- Tests are also run automatically on push/PR via GitHub Actions:
+- Tests are also run automatically on push/PR via GitHub Actions: 
   - GitHub Action/Workflow implemented to [run BATS-CORE tests](https://github.com/badj/repoguard/actions/workflows/test.yml) on every commit and scheduled intervals.
+  - [![Test RepoGuard](https://github.com/badj/repoguard/actions/workflows/test.yml/badge.svg)](https://github.com/badj/repoguard/actions/workflows/test.yml)
 
 ### Expected output - run with options for tracing and timings
 
