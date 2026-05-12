@@ -25,6 +25,7 @@ In modern supply-chain attacks, malware is often hidden in plain sight—stitche
     - [Output sample – backdoors found](#output-sample--backdoors-found)
     - [What it Checks](#what-it-checks)
 - [Safety Best Practices](#safety-best-practices)
+- [Testing](#testing)
 - [TO DO](#to-do)
 - [Contributing](#contributing)
 - [License](#license)
@@ -56,20 +57,28 @@ chmod +x check-repo.sh
 
 ```terminaloutput
 repoguard
-├── Article             // local copy of article
+├── .github/
+│   └── workflows/
+│       └── test.yml     // GitHub Action/Workflow to run BATS-CORE tests on every commit and scheduled intervals
+├── Article              // local copy of article
 │ └── Real-world-malware-analysis-by-Ryan-Oberholzer.pdf
 ├── LICENSE
 ├── README.md
-├── babel.config.js     // Test Sample File
-├── backend             // Test Sample Folder 
-│ └── package.json      // Test Sample File
-├── check-repo.sh       // RepoGuard Bash Script
-├── decoder-catch.js    // Test Sample File
-├── package.json        // Test Sample File
-├── postcss.config.js   // Test Sample File
-├── tailwind.config.js  // Test Sample File
-├── vulnerable_test.ts  // Test Sample File
-└── webpack.config.js   // Test Sample File
+├── test/
+│   └── check-repo.bats  // BATS-CORE test file
+├── babel.config.js      // Test Sample File
+├── backend              // Test Sample Folder 
+│ └── package.json       // Test Sample File
+├── check-repo.sh        // RepoGuard Bash Script
+├── decoder-catch.js     // Test Sample File
+├── package.json         // Test Sample File
+├── postcss.config.js    // Test Sample File
+├── tailwind.config.js   // Test Sample File
+├── vulnerable_test.ts   // Test Sample File
+└── webpack.config.js    // Test Sample File
+
+
+
 
 3 directories, 12 files
 ```
@@ -188,6 +197,42 @@ Review the output above. If you see:
 - Use Docker. If you must run the code, run it in a container without mounting your home directory.
 - Review the Output. This script is a helper, not a guarantee.
 - If it flags a 500-line tailwind.config.js, open that file and scroll to the bottom!
+
+[_⇡ Return to the Table of Contents_](#table-of-contents)
+
+## Testing
+
+```bash
+  # Install BATS (once)
+  sudo apt-get install bats   # or brew install bats-core on macOS
+  
+  # Run tests
+  bats test/check-repo.bats
+  
+  # OR Run tests with options for tracing and timings
+  bats --tap --trace --timing
+```
+
+- Tests are also run automatically on push/PR via GitHub Actions:
+  - GitHub Action/Workflow implemented to [run BATS-CORE tests](https://github.com/badj/repoguard/actions/workflows/test.yml) on every commit and scheduled intervals.
+
+### Expected output - run with options for tracing and timings
+
+> Expected output for a successful / completed test suite local run with options `--trace --timing` for 9 tests passing
+
+```terminaloutput
+  repoguard (main) % bats --tap --trace --timing check-repo.bats  
+  1..9
+  ok 1 check-repo.sh exists and is executable in 18ms
+  ok 2 script runs without errors (exit status 0) in 75ms
+  ok 3 detects dangerous patterns (eval, exec, Function, suspicious env vars) in 65ms
+  ok 4 detects base64 / encoded string obfuscation in 63ms
+  ok 5 flags long config files as potential obfuscation in 65ms
+  ok 6 detects postinstall / preinstall / prepare scripts in 64ms
+  ok 7 detects suspicious dependencies (0.0.0 / 0.0.1) in 74ms
+  ok 8 script always ends with === DONE === in 62ms
+  ok 9 script includes safety review message in 62ms
+```
 
 [_⇡ Return to the Table of Contents_](#table-of-contents)
 

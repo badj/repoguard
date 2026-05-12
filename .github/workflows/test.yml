@@ -1,0 +1,32 @@
+name: Test RepoGuard
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '30 19 * * *'  # 9 am NZT (UTC+12)
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Install BATS
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y bats
+
+      - name: Install bats-support & bats-assert
+        run: |
+          git clone https://github.com/bats-core/bats-support.git test_helper/bats-support
+          git clone https://github.com/bats-core/bats-assert.git  test_helper/bats-assert
+
+      - name: Run bats tests
+        working-directory: tests
+        run: bats --tap --trace --timing check-repo.bats
