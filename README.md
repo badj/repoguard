@@ -1,7 +1,7 @@
 # RepoGuard: Pre-Install Security Scanner
 
 > RepoGuard is a lightweight bash script designed to audit third-party repositories before you run npm install or npm start.
-> Script from ["Real-world malware analysis" by Ryan Oberholzer](https://medium.com/@ryan.oberholzer/i-was-sent-a-technical-assessment-it-was-malware-heres-the-full-story-30797665d940) / [_local copy of article_](Article/Real-world-malware-analysis-by-Ryan-Oberholzer.pdf). This tool helps detect backdoors, obfuscated code, and credential-stealing patterns common in "technical assessment" scams.
+> Script created from ["Real-world malware analysis" by Ryan Oberholzer](https://medium.com/@ryan.oberholzer/i-was-sent-a-technical-assessment-it-was-malware-heres-the-full-story-30797665d940) / [_local copy of article_](Article/Real-world-malware-analysis-by-Ryan-Oberholzer.pdf). This tool helps detect backdoors, obfuscated code, and credential-stealing patterns common in "technical assessment" scams.
 
 ## Why to use this?
 
