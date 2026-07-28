@@ -1,7 +1,8 @@
 #!/bin/bash
 # Run from repo root: bash check-repo.sh
-# Or: chmod +x check-repo.sh && ./check-repo.sh echo "=== CHECKING REPO BEFORE RUN ==="
+# Or: chmod +x check-repo.sh && ./check-repo.sh
 
+echo "=== CHECKING REPO BEFORE RUN ==="
 echo ""
 
 echo "--- 1. Dangerous patterns (eval, exec, private keys) ---"

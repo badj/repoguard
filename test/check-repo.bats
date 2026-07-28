@@ -4,24 +4,28 @@
 # Run with: bats test/check-repo.bats
 
 setup() {
-    # Ensure we're in the repo root (where the test files live)
-    cd "$(dirname "$BATS_TEST_FILENAME")/.." || exit 1
+    # Resolve the repo root, then run the script from the fixtures directory
+    # (test/fixtures/ mirrors a scanned project's root, so the root-relative
+    # config and package.json checks find the sample files)
+    REPO_ROOT="$(cd "$(dirname "$BATS_TEST_FILENAME")/.." && pwd)"
+    CHECK_REPO="$REPO_ROOT/check-repo.sh"
+    cd "$REPO_ROOT/test/fixtures" || exit 1
     # Make sure the script is executable
-    chmod +x check-repo.sh 2>/dev/null || true
+    chmod +x "$CHECK_REPO" 2>/dev/null || true
 }
 
 @test "check-repo.sh exists and is executable" {
-    [ -f "check-repo.sh" ]
-    [ -x "check-repo.sh" ]
+    [ -f "$CHECK_REPO" ]
+    [ -x "$CHECK_REPO" ]
 }
 
 @test "script runs without errors (exit status 0)" {
-    run ./check-repo.sh
+    run "$CHECK_REPO"
     [ "$status" -eq 0 ]
 }
 
 @test "detects dangerous patterns (eval, exec, Function, suspicious env vars)" {
-    run ./check-repo.sh
+    run "$CHECK_REPO"
     [[ "$output" == *"eval(input)"* ]]
     [[ "$output" == *"child_process.exec"* ]]
     [[ "$output" == *"new Function"* ]]
@@ -30,13 +34,13 @@ setup() {
 }
 
 @test "detects base64 / encoded string obfuscation" {
-    run ./check-repo.sh
+    run "$CHECK_REPO"
     [[ "$output" == *"Buffer"* ]]
     [[ "$output" == *"decoder-catch.js"* ]]
 }
 
 @test "flags long config files as potential obfuscation" {
-    run ./check-repo.sh
+    run "$CHECK_REPO"
     [[ "$output" == *"tailwind.config.js"* ]]
     [[ "$output" == *"webpack.config.js"* ]]
     [[ "$output" == *"babel.config.js"* ]]
@@ -45,7 +49,7 @@ setup() {
 }
 
 @test "detects postinstall / preinstall / prepare scripts" {
-    run ./check-repo.sh
+    run "$CHECK_REPO"
     [[ "$output" == *"postinstall"* ]]
     [[ "$output" == *"preinstall"* ]]
     [[ "$output" == *"prepare"* ]]
@@ -53,18 +57,18 @@ setup() {
 }
 
 @test "detects suspicious dependencies (0.0.0 / 0.0.1)" {
-    run ./check-repo.sh
+    run "$CHECK_REPO"
     [[ "$output" == *"0.0.0"* ]]
     [[ "$output" == *"0.0.1"* ]]
     [[ "$output" == *"@catchMe/test"* ]]
 }
 
 @test "script always ends with === DONE ===" {
-    run ./check-repo.sh
+    run "$CHECK_REPO"
     [[ "$output" == *"=== DONE ==="* ]]
 }
 
 @test "script includes safety review message" {
-    run ./check-repo.sh
+    run "$CHECK_REPO"
     [[ "$output" == *"DO NOT RUN npm install"* ]]
 }

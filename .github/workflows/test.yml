@@ -9,13 +9,16 @@ on:
     - cron: '30 19 * * *'  # 9 am NZT (UTC+12)
   workflow_dispatch:  # Allows manual trigger
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Install BATS
         run: |
@@ -26,7 +29,9 @@ jobs:
         run: |
           mkdir -p test/test_helper
           git clone https://github.com/bats-core/bats-support.git test/test_helper/bats-support
+          git -C test/test_helper/bats-support checkout 24a72e14349690bcbf7c151b9d2d1cdd32d36eb1 # v0.3.0
           git clone https://github.com/bats-core/bats-assert.git  test/test_helper/bats-assert
+          git -C test/test_helper/bats-assert checkout f1e9280eaae8f86cbe278a687e6ba755bc802c1a # v2.2.4
 
       - name: Run BATS tests
         run: bats --tap --trace --timing test/check-repo.bats

@@ -60,30 +60,33 @@ chmod +x check-repo.sh
 ```terminaloutput
 repoguard
 ├── .github/
+│   ├── dependabot.yml   // Dependabot config to keep GitHub Actions up to date
 │   └── workflows/
 │       └── test.yml     // GitHub Action/Workflow to run BATS-CORE tests on every commit and scheduled intervals
 ├── Article              // local copy of article
 │ └── Real-world-malware-analysis-by-Ryan-Oberholzer.pdf
 ├── LICENSE
 ├── README.md
-├── test/
-│   └── check-repo.bats  // BATS-CORE test file
-├── babel.config.js      // Test Sample File
-├── backend              // Test Sample Folder 
-│ └── package.json       // Test Sample File
+├── SECURITY.md          // How to report vulnerabilities privately
 ├── check-repo.sh        // RepoGuard Bash Script
-├── decoder-catch.js     // Test Sample File
-├── package.json         // Test Sample File
-├── postcss.config.js    // Test Sample File
-├── tailwind.config.js   // Test Sample File
-├── vulnerable_test.ts   // Test Sample File
-└── webpack.config.js    // Test Sample File
-
-
-
-
-3 directories, 12 files
+└── test/
+    ├── check-repo.bats  // BATS-CORE test file
+    ├── test_helper.bash
+    └── fixtures/        // Inert malicious-pattern samples used by the tests
+        ├── babel.config.js      // Test Sample File
+        ├── backend
+        │   └── package.json     // Test Sample File
+        ├── decoder-catch.js     // Test Sample File
+        ├── package.json         // Test Sample File
+        ├── postcss.config.js    // Test Sample File
+        ├── tailwind.config.js   // Test Sample File
+        ├── vulnerable_test.ts   // Test Sample File
+        └── webpack.config.js    // Test Sample File
 ```
+
+> **Note:** The test sample files live in `test/fixtures/` (not the repo root) so
+> nobody can accidentally run `npm install` against the intentionally
+> malicious-looking `package.json` samples.
 
 
 [_⇡ Return to the Table of Contents_](#table-of-contents)
@@ -104,6 +107,7 @@ Move the [script - check-repo.sh](check-repo.sh) into the root of the project yo
 ```terminaloutput
   jjbadenhorst:repoguard (main) % chmod +x check-repo.sh
   jjbadenhorst:repoguard (main) % ./check-repo.sh
+  === CHECKING REPO BEFORE RUN ===
   
   --- 1. Dangerous patterns (eval, exec, private keys) ---
     (none found)
@@ -133,10 +137,12 @@ Move the [script - check-repo.sh](check-repo.sh) into the root of the project yo
 
 > Refer to [Project Structure](#project-structure) for the test files used to generate this output. 
 >
-> Run `check-repo.sh` in this project to demo DANGEROUS PATTERNS found. 
+> Run `check-repo.sh` from the `test/fixtures/` directory in this project to demo DANGEROUS PATTERNS found:
+> `cd test/fixtures && ../../check-repo.sh`
 
 ```terminaloutput
-  jjbadenhorst:repoguard (main) % ./check-repo.sh
+  jjbadenhorst:fixtures (main) % ../../check-repo.sh
+  === CHECKING REPO BEFORE RUN ===
   
 --- 1. Dangerous patterns (eval, exec, private keys) ---
 ./vulnerable_test.ts:8:    eval(input); // Should be caught
